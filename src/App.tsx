@@ -1,12 +1,49 @@
 import './styles/theme.css';
 import './styles/global.css';
-import { Heading } from './components/Heading';
-import { TimerIcon } from 'lucide-react';
+
+import { Container } from './components/Container';
+import { Logo }      from './components/Logo';
+import { Menu }      from './components/Menu';
+import { CountDown } from './components/CountDown';
+import { DefaultInput } from './components/DafaultInput';
 
 export function App() {
   return (
     <>
-      <Heading>Chronos Pomodoro <button><TimerIcon /></button></Heading>
+      <Container>
+        <Logo />
+      </Container>
+
+      <Container>
+        <Menu />
+      </Container>
+
+      <Container>
+        <CountDown />
+      </Container>
+
+      <Container>
+        <form className="form" action="">
+          <div className="formRow">
+            <DefaultInput
+              id='input'
+              type='text'
+              labelText='task'
+              placeholder='Digite algo'
+            />
+          </div>
+          <div className="formRow">
+            <p>Lorem ipsum dolor sit amet.</p>
+          </div>
+          <div className="formRow">
+            <p>Ciclos:</p>
+            <p>0 0 0 0 0 0</p>
+          </div>
+          <div className="formRow">
+            <button>enviar</button>
+          </div>
+        </form>
+      </Container>
     </>
   )
 }
