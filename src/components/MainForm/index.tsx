@@ -9,21 +9,23 @@ import { getNextCycle }     from '../../utils/getNextCycle';
 import { getNextCycleType } from '../../utils/getNextCycleType';
 import { TaskActionTypes } from '../../contexts/TaskContext/taskActions';
 import { Tips } from '../Tips';
+import { showMessage } from '../../adapters/showMessage';
 
 export function MainForm() {
   const {state, dispatch} = useTaskContext()
   const taskNameInput = useRef<HTMLInputElement>(null)
   const nextCycle = getNextCycle(state.currentCycle)
   const nextCycleType = getNextCycleType(nextCycle)
-
+  const isBreakTime = nextCycleType === 'shortBreakTime' || nextCycleType === 'longBreakTime'
   function handleCreateCycle(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    showMessage.dismiss()
 
     if (!taskNameInput.current) return
 
     const taskName = taskNameInput.current.value.trim()
     if (!taskName) {
-      alert('Por favor, digite o nome da tarefa.')
+      showMessage.warn('Por favor, digite o nome da tarefa.')
       return
     }
 
@@ -53,7 +55,7 @@ export function MainForm() {
           labelText={state.activeTask?.name || 'O que você vai fazer?'}
           placeholder='Digite algo'
           ref={taskNameInput}
-          disabled={!!state.activeTask}
+          disabled={!!state.activeTask || isBreakTime}
           />
         </div>
 
