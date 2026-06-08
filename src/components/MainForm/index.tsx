@@ -17,6 +17,8 @@ export function MainForm() {
   const nextCycle = getNextCycle(state.currentCycle)
   const nextCycleType = getNextCycleType(nextCycle)
   const isBreakTime = nextCycleType === 'shortBreakTime' || nextCycleType === 'longBreakTime'
+  const lastTaskName = state.tasks[state.tasks.length - 1]?.name || ''
+
   function handleCreateCycle(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     showMessage.dismiss()
@@ -52,10 +54,11 @@ export function MainForm() {
           <DefaultInput
           id='input'
           type='text'
-          labelText={state.activeTask?.name || 'O que você vai fazer?'}
+          labelText={state.activeTask?.name || (isBreakTime ? 'Descanse' : 'O que você vai fazer agora?')}
           placeholder='Digite algo'
           ref={taskNameInput}
           disabled={!!state.activeTask || isBreakTime}
+          defaultValue={lastTaskName}
           />
         </div>
 
