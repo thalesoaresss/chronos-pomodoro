@@ -1,6 +1,7 @@
 import type { TaskStateModel } from "../../models/taskStateModel";
 import { formatSecondsToMin } from "../../utils/formatSecondsToMin";
 import { getNextCycle } from "../../utils/getNextCycle";
+import { initialTaskState } from "./initialTaskState";
 import { TaskActionTypes, type TaskActionModel } from "./taskActions";
 
 export function taskReducer(state: TaskStateModel, action: TaskActionModel): TaskStateModel {
@@ -33,7 +34,8 @@ export function taskReducer(state: TaskStateModel, action: TaskActionModel): Tas
       }
     }
     case TaskActionTypes.RESET_TASK: {
-      return state
+      localStorage.removeItem('tasks')
+      return {...initialTaskState}
     }
     case TaskActionTypes.COUNT_DOWN: {
       return {
