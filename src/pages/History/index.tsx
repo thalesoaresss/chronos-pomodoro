@@ -4,23 +4,35 @@ import { DefaultButton } from '../../components/DefaultButton';
 import { Heading } from '../../components/Heading';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { useTaskContext } from '../../contexts/TaskContext/useTaskContext';
-
-import styles from './styles.module.css';
 import { formatDate } from '../../utils/formatDate';
 import { getTaskStatus } from '../../utils/getTaskStatus';
+import { showMessage } from '../../adapters/showMessage';
+import { useEffect, useState } from 'react';
+
+import styles from './styles.module.css';
 import { TaskActionTypes } from '../../contexts/TaskContext/taskActions';
 
 export function History() {
   const {state, dispatch} = useTaskContext()
+  const [confirmClearHistory, setConfirmClearHistory] = useState(false);
   const sortedTasks  = [...state.tasks].sort((a, b) => { return b.startDate - a.startDate })
   const hasTasks = state.tasks.length > 0;
 
-function handleDeleteHistory() {
-  if(!confirm('Tem certeza que deseja apagar todo o histórico? Essa ação não pode ser desfeita.')) {
-    return;
+  useEffect(() => {
+    if(!confirmClearHistory) return;
+
+    setConfirmClearHistory(false);
+    dispatch({ type: TaskActionTypes.RESET_TASK });
+  }, [confirmClearHistory, dispatch])
+
+  useEffect(() => {return () => showMessage.dismiss()}, [])
+
+  function handleDeleteHistory() {
+    showMessage.dismiss()
+    showMessage.confirm('Tem certeza que deseja apagar todo o histórico?', (confirmation) => {
+      setConfirmClearHistory(confirmation);
+    })
   }
-  dispatch({type: TaskActionTypes.RESET_TASK})
-}
 
   return (
     <MainTemplate>
