@@ -7,9 +7,10 @@ import { MainTemplate } from '../../templates/MainTemplate';
 import { useRef } from 'react';
 import { useTaskContext } from '../../contexts/TaskContext/useTaskContext';
 import { showMessage } from '../../adapters/showMessage';
+import { TaskActionTypes } from '../../contexts/TaskContext/taskActions';
 
 export function Settings() {
-  const { state } = useTaskContext();
+  const { state, dispatch } = useTaskContext();
   const workTimeInput = useRef<HTMLInputElement>(null)
   const shortBreakTimeInput = useRef<HTMLInputElement>(null)
   const longBreakTimeInput = useRef<HTMLInputElement>(null)
@@ -43,6 +44,9 @@ export function Settings() {
       showMessage.error('O tempo de descanso longo deve ser no máximo 60 minutos.');
       return;
     }
+
+    dispatch({type: TaskActionTypes.CHANGE_SETTINGS, payload: {workTime, shortBreakTime, longBreakTime}})
+    showMessage.success('Configurações salvas com sucesso!');
   }
   return (
     <MainTemplate>
